@@ -59,6 +59,7 @@ namespace Naydenov.Nsudotnet.NumberGuesser
                     if (temp.Equals("q"))
                     {
                         Console.WriteLine("I'm sorry you loose");
+                        break;
                     }
                     else
                     {
