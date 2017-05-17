@@ -66,16 +66,20 @@ namespace Naydenov.Nsudotnet.Enigma
             algorithm.GenerateIV();
             File.WriteAllLines(String.Format("{0}.key.txt", GetFileName(input)), 
                 new string[] {Convert.ToBase64String(algorithm.Key), Convert.ToBase64String(algorithm.IV)});
-            Stream a, b, c;
             System.Security.Cryptography.ICryptoTransform cryptor;
-            (a = new System.Security.Cryptography.CryptoStream(
-                b = new FileStream(input, FileMode.Open), 
-                cryptor = algorithm.CreateEncryptor(), 
-                System.Security.Cryptography.CryptoStreamMode.Read))
-                .CopyTo(c = new FileStream(output, FileMode.Create));
-            a.Dispose();
-            b.Dispose();
-            c.Dispose();
+            using (var inStream = new FileStream(input, FileMode.Open))
+            {
+                using (var crStream = new System.Security.Cryptography.CryptoStream(
+                    inStream,
+                    cryptor = algorithm.CreateEncryptor(),
+                    System.Security.Cryptography.CryptoStreamMode.Read))
+                {
+                    using (var outStream = new FileStream(output, FileMode.Create))
+                    {
+                        crStream.CopyTo(outStream);
+                    }
+                }
+            }
             cryptor.Dispose();
             algorithm.Dispose();
         }
@@ -86,16 +90,20 @@ namespace Naydenov.Nsudotnet.Enigma
             var IVKey = File.ReadAllLines(keyFile);
             algorithm.Key = Convert.FromBase64String(IVKey[0]);
             algorithm.IV = Convert.FromBase64String(IVKey[1]);
-            Stream a, b, c;
             System.Security.Cryptography.ICryptoTransform cryptor;
-            (a = new System.Security.Cryptography.CryptoStream(
-                b = new FileStream(input, FileMode.Open),
-                cryptor = algorithm.CreateDecryptor(),
-                System.Security.Cryptography.CryptoStreamMode.Read))
-                .CopyTo(c = new FileStream(output, FileMode.Create));
-            a.Dispose();
-            b.Dispose();
-            c.Dispose();
+            using (var inStream = new FileStream(input, FileMode.Open))
+            {
+                using (var crStream = new System.Security.Cryptography.CryptoStream(
+                    inStream,
+                    cryptor = algorithm.CreateDecryptor(),
+                    System.Security.Cryptography.CryptoStreamMode.Read))
+                {
+                    using (var outStream = new FileStream(output, FileMode.Create))
+                    {
+                        crStream.CopyTo(outStream);
+                    }
+                }
+            }
             cryptor.Dispose();
             algorithm.Dispose();
         }
