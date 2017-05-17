@@ -73,9 +73,9 @@ namespace Naydenov.Nsudotnet.Enigma
                 cryptor = algorithm.CreateEncryptor(), 
                 System.Security.Cryptography.CryptoStreamMode.Read))
                 .CopyTo(c = new FileStream(output, FileMode.Create));
-            a.Close();
-            b.Close();
-            c.Close();
+            a.Dispose();
+            b.Dispose();
+            c.Dispose();
             cryptor.Dispose();
             algorithm.Dispose();
         }
@@ -93,9 +93,9 @@ namespace Naydenov.Nsudotnet.Enigma
                 cryptor = algorithm.CreateDecryptor(),
                 System.Security.Cryptography.CryptoStreamMode.Read))
                 .CopyTo(c = new FileStream(output, FileMode.Create));
-            a.Close();
-            b.Close();
-            c.Close();
+            a.Dispose();
+            b.Dispose();
+            c.Dispose();
             cryptor.Dispose();
             algorithm.Dispose();
         }
