@@ -15,12 +15,12 @@ namespace Naydenov.Nsudotnet.Enigma
             {
                 if ((args.Length == 4) && (args[0].Equals("encrypt")))
                 {
-                    encode(args[2], args[1], args[3]);
+                    Encode(args[2], args[1], args[3]);
                     return;
                 }
                 if ((args.Length == 5) && (args[0].Equals("decrypt")))
                 {
-                    decode(args[2], args[1], args[4], args[3]);
+                    Decode(args[2], args[1], args[4], args[3]);
                     return;
                 }
                 throw new Exception("Param error");
@@ -30,7 +30,7 @@ namespace Naydenov.Nsudotnet.Enigma
             }
         }
 
-        private static System.Security.Cryptography.SymmetricAlgorithm getAlg(string algName)
+        private static System.Security.Cryptography.SymmetricAlgorithm GetAlgorithm(string algName)
         {
             System.Security.Cryptography.SymmetricAlgorithm ans = null;
             switch (algName)
@@ -53,49 +53,51 @@ namespace Naydenov.Nsudotnet.Enigma
             return ans;
         }
 
-        private static string getFileName(string path)
+        private static string GetFileName(string path)
         {
-            int index = path.LastIndexOf('.');
-            if (index < 0)
-            {
-                index = path.Length;
-            }
-            return path.Substring(0, index);
+            string ext = Path.GetExtension(path);
+            return path.Replace(ext, "");
         }
 
-        private static void encode(string alg, string input, string output)
+        private static void Encode(string alg, string input, string output)
         {
-            var algorithm = getAlg(alg);
+            var algorithm = GetAlgorithm(alg);
             algorithm.GenerateKey();
             algorithm.GenerateIV();
-            File.WriteAllLines(String.Format("{0}.key.txt", getFileName(input)), 
+            File.WriteAllLines(String.Format("{0}.key.txt", GetFileName(input)), 
                 new string[] {Convert.ToBase64String(algorithm.Key), Convert.ToBase64String(algorithm.IV)});
             Stream a, b, c;
+            System.Security.Cryptography.ICryptoTransform cryptor;
             (a = new System.Security.Cryptography.CryptoStream(
                 b = new FileStream(input, FileMode.Open), 
-                algorithm.CreateEncryptor(), 
+                cryptor = algorithm.CreateEncryptor(), 
                 System.Security.Cryptography.CryptoStreamMode.Read))
                 .CopyTo(c = new FileStream(output, FileMode.Create));
             a.Close();
             b.Close();
             c.Close();
+            cryptor.Dispose();
+            algorithm.Dispose();
         }
 
-        private static void decode(string alg, string input, string output, string keyFile)
+        private static void Decode(string alg, string input, string output, string keyFile)
         {
-            var algorithm = getAlg(alg);
+            var algorithm = GetAlgorithm(alg);
             var IVKey = File.ReadAllLines(keyFile);
             algorithm.Key = Convert.FromBase64String(IVKey[0]);
             algorithm.IV = Convert.FromBase64String(IVKey[1]);
             Stream a, b, c;
+            System.Security.Cryptography.ICryptoTransform cryptor;
             (a = new System.Security.Cryptography.CryptoStream(
                 b = new FileStream(input, FileMode.Open),
-                algorithm.CreateDecryptor(),
+                cryptor = algorithm.CreateDecryptor(),
                 System.Security.Cryptography.CryptoStreamMode.Read))
                 .CopyTo(c = new FileStream(output, FileMode.Create));
             a.Close();
             b.Close();
             c.Close();
+            cryptor.Dispose();
+            algorithm.Dispose();
         }
         
     }

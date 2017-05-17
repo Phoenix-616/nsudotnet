@@ -14,27 +14,27 @@ namespace Naydenov.Nsudotnet.NumberGuesser
         static void Main(string[] args)
         {
             var rand = new Random();
-            int number = rand.Next() % 101;
+            int number = rand.Next(101);
             Console.WriteLine("Your name, player:");
             string player = Console.ReadLine();
             string temp;
             int tmp;
 
             DateTime start = DateTime.Now;
-            LinkedList<int> answers = new LinkedList<int>();
+            List<int> answers = new List<int>();
             Console.WriteLine("Game started. Enter your answer");
             for (int i = 1; ; i = (i + 1) % 4)
             {
                 if (i == 0)
                 {
-                    Console.WriteLine(sentence[rand.Next() % sentence.Length] + player);
+                    Console.WriteLine(sentence[rand.Next(sentence.Length)] + player);
                 }
                 if (int.TryParse(temp = Console.ReadLine(), out tmp))
                 {
-                    answers.AddLast(tmp);
+                    answers.Add(tmp);
                     if (tmp == number)
                     {
-                        Console.WriteLine(String.Format("Victory in {0} minutes after {1} attempts", (DateTime.Now - start).Minutes, answers.Count));
+                        Console.WriteLine(String.Format("Victory in {0} minutes after {1} attempts", (DateTime.Now.Subtract(start).TotalMinutes), answers.Count));
                         foreach (int ans in answers)
                         {
                             string sign = "";

@@ -10,20 +10,20 @@ namespace Naydenov.Nsudotnet.LineCounter
     class Program
     {
 
-        private static int dir(string path, string ext, out int files)
+        private static int DirectoryScanning(string path, string ext, out int files)
         {
             int ans = 0;
             files = 0;
             foreach (string subPath in Directory.GetDirectories(path))
             {
                 int t;
-                ans += dir(subPath, ext, out t);
+                ans += DirectoryScanning(subPath, ext, out t);
                 files += t;
             }
             foreach (string fileName in Directory.GetFiles(path, ext))
             {
                 bool t;
-                ans += file(fileName, out t);
+                ans += FileScanning(fileName, out t);
                 if (t)
                 {
                     files++;
@@ -32,7 +32,7 @@ namespace Naydenov.Nsudotnet.LineCounter
             return ans;
         }
 
-        private static int file(string path, out bool haveLine)
+        private static int FileScanning(string path, out bool haveLine)
         {
             int ans = 0;
             haveLine = false;
@@ -65,7 +65,7 @@ namespace Naydenov.Nsudotnet.LineCounter
             }
             Console.WriteLine();
             int t;
-            int num = dir(Directory.GetCurrentDirectory(), ext, out t);
+            int num = DirectoryScanning(Directory.GetCurrentDirectory(), ext, out t);
             Console.WriteLine(String.Format("{0} lines in {1} files", num, t));
             Console.ReadKey();
         }
