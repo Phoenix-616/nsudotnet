@@ -8,9 +8,6 @@ namespace Naydenov.Nsudotnet.NumberGuesser
 {
     class Program
     {
-
-        private static string[] sentence = {"You are wrong, ", "Not this time, ", "Try harder, ", "You can do it better, "};
-
         static void Main(string[] args)
         {
             var rand = new Random();
@@ -19,6 +16,11 @@ namespace Naydenov.Nsudotnet.NumberGuesser
             string player = Console.ReadLine();
             string temp;
             int tmp;
+            string[] sentence = { String.Format("{0}, try harder!", player),
+                String.Format("WTF?! {0}, just do it!", player),
+                String.Format("You can better, {0}!", player),
+                String.Format("U R LOOSER, {0}", player)};
+
 
             DateTime start = DateTime.Now;
             List<int> answers = new List<int>();
@@ -27,7 +29,7 @@ namespace Naydenov.Nsudotnet.NumberGuesser
             {
                 if (i == 0)
                 {
-                    Console.WriteLine(sentence[rand.Next(sentence.Length)] + player);
+                    Console.WriteLine(sentence[rand.Next(sentence.Length)]);
                 }
                 if (int.TryParse(temp = Console.ReadLine(), out tmp))
                 {
