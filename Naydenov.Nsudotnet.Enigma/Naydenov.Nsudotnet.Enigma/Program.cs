@@ -54,10 +54,7 @@ namespace Naydenov.Nsudotnet.Enigma
             return ans;
         }
 
-        private static string GetFileName(string path)
-        {
-            return Path.GetFileNameWithoutExtension(path);
-        }
+        
 
         private static void Encode(string alg, string input, string output)
         {
@@ -65,7 +62,7 @@ namespace Naydenov.Nsudotnet.Enigma
             {
                 algorithm.GenerateKey();
                 algorithm.GenerateIV();
-                File.WriteAllLines(String.Format("{0}.key.txt", GetFileName(input)),
+                File.WriteAllLines(Path.ChangeExtension(input, ".key.txt"),
                     new string[] { Convert.ToBase64String(algorithm.Key), Convert.ToBase64String(algorithm.IV) });
                 using (var cryptor = algorithm.CreateEncryptor())
                 using (var inStream = new FileStream(input, FileMode.Open))
