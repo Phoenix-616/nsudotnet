@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Управление общими сведениями о сборке осуществляется с помощью 
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("Naydenov.Nsudotnet.LineCounter")]
+[assembly: AssemblyTitle("Naydenov.Nsudotnet.LinesCounter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Naydenov.Nsudotnet.LineCounter")]
+[assembly: AssemblyProduct("Naydenov.Nsudotnet.LinesCounter")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
-[assembly: Guid("476cdbb6-9bf7-4a62-bab6-b954072f3282")]
+[assembly: Guid("24985b10-1fee-42e6-a30a-5e8a7cedff67")]
 
 // Сведения о версии сборки состоят из следующих четырех значений:
 //
