@@ -36,9 +36,9 @@ namespace Naydenov.Nsudotnet.LinesCounter
                 while ((str = input.ReadLine()) != null)
                 {
                     i++;
-                    str = String.Join("", str.Split(null));
+                    str = str.Trim();
                     int pos = 0;
-                    while (true)
+                    while (str != "")
                     {
                         if (openedCom)
                         {
