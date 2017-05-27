@@ -30,48 +30,56 @@ namespace Naydenov.Nsudotnet.LinesCounter
             if (Path.GetExtension(path) == ext)
             {
                 bool openedCom = false;
+                bool continueLooping = false;
+                bool lostCode = false;
                 var input = new StreamReader(path);
                 string str;
                 int i = 0;
                 while ((str = input.ReadLine()) != null)
                 {
                     i++;
-                    str = str.Trim();
                     int pos = 0;
+                    continueLooping = false;
+                    str = str.Trim();
+                    lostCode = false;
                     while (str != "")
                     {
+                        str = str.Trim();
+                        Console.WriteLine(str);
                         if (openedCom)
                         {
-                            int t = str.IndexOf("*/", pos);
-                            if (t < 0)
+                            int idx;
+                            if ((idx = str.IndexOf("*/")) == -1)
                             {
-                                str = str.Remove(pos);
+                                continueLooping = true;
                                 break;
                             } else
                             {
+                                str = str.Substring(idx + 2);
                                 openedCom = false;
-                                str = str.Remove(pos, t - pos + 2);
                                 continue;
                             }
                         } else
                         {
-                            int t1 = str.IndexOf("/*", pos);
-                            int t2 = str.IndexOf("//", pos);
-                            if ((t2 > -1) && ((t1 > t2) || (t1 == -1)))
+                            int idx1 = str.IndexOf("//"), idx2 = str.IndexOf("/*");
+                            if ((idx1 < 0) && (idx2 < 0)) break;
+                            if ((idx1 > -1) && ((idx1 < idx2) || (idx2 < 0)))
                             {
-                                str = str.Remove(t2);
+                                str = str.Substring(0, idx1);
                                 break;
                             }
-                            if ((t1 > -1) && ((t1 < t2) || (t2 == -1)))
+                            if ((idx2 > -1) && ((idx2 < idx1) || (idx1 < 0)))
                             {
-                                pos = t1;
                                 openedCom = true;
+                                if (idx2 > 0) lostCode = true;
+                                str.Substring(idx2 + 2);
                                 continue;
                             }
-                            if ((t1 == -1) && (t2 == -1)) break;
                         }
                     }
-                    if (str != "")
+                    if (continueLooping) continue;
+                    str = str.Trim();
+                    if ((str != "") || lostCode)
                     {
                         ans++;
                     }
